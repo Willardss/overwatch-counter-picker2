@@ -324,10 +324,10 @@ function stars(r: number) {
 
 
 function worthText(r: number) {
-  if (r >= 4) return { label: "Worth it", sub: "Favored matchup if you play it clean." };
-  if (r >= 3) return { label: "Playable", sub: "Situational—depends on map/comp and your comfort." };
-  if (r >= 2) return { label: "Risky", sub: "You’ll need outplays or team help." };
-  return { label: "Not recommended", sub: "Hard matchup—swap if it’s not working." };
+  if (r >= 4) return { label: \"Worth it\", sub: \"Favored matchup if you play it clean.\" };
+  if (r >= 3) return { label: \"Playable\", sub: \"Situational—depends on map/comp and your comfort.\" };
+  if (r >= 2) return { label: \"Risky\", sub: \"You’ll need outplays or team help.\" };
+  return { label: \"Not recommended\", sub: \"Hard matchup—swap if it’s not working.\" };
 }
 
 function formatDate(iso: string) {
@@ -522,16 +522,6 @@ export default function App() {
   // Team analysis
   const [teamEnemyIds, setTeamEnemyIds] = useState<string[]>(["reinhardt", "ana"]);
 
-  function toggleTeamEnemy(id: string) {
-    setTeamEnemyIds((prev) => {
-      const has = prev.includes(id);
-      if (has) return prev.filter((x) => x !== id);
-      if (prev.length >= 5) return prev;
-      return [...prev, id];
-    });
-  }
-
-
   // Tracker
   const [trackRole, setTrackRole] = useState<Role>("Damage");
   const [heroPlayedId, setHeroPlayedId] = useState("soldier76");
@@ -595,6 +585,16 @@ export default function App() {
     setSession(null);
     saveJSON(LS_KEYS.session, null);
   }
+
+  function toggleTeamEnemy(id: string) {
+    setTeamEnemyIds((prev) => {
+      const has = prev.includes(id);
+      if (has) return prev.filter((x) => x !== id);
+      if (prev.length >= 5) return prev; // max 5
+      return [...prev, id];
+    });
+  }
+
 
   // Recommendations
   const singleRecs = useMemo(() => {
@@ -915,20 +915,33 @@ export default function App() {
                     <CardDesc>Select up to 5 enemy heroes. Get best counters for your role + matchup breakdown.</CardDesc>
                   </CardHeader>
                   <CardBody className="space-y-3">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {Array.from({ length: 5 }).map((_, idx) => (
-                        <HeroSelect
-                          key={idx}
-                          value={teamEnemyIds[idx] ?? ""}
-                          allowEmpty
-                          placeholder={`Enemy slot ${idx + 1}`}
-                          onChange={(id) => {
-                            const next = [...teamEnemyIds];
-                            next[idx] = id;
-                            const dedup = next.filter(Boolean).filter((v, i, a) => a.indexOf(v) === i);
-                            setTeamEnemyIds(dedup);
-                          }}
-                        />
+                    <div className="space-y-4">
+                      {(["Tank","Damage","Support"] as Role[]).map((role) => (
+                        <div key={role}>
+                          <h4 className="mb-2 text-sm font-semibold text-zinc-300 flex items-center gap-2">
+                            {roleIcon(role)} {role}
+                            <span className="text-xs text-zinc-500 font-normal">(click to toggle)</span>
+                          </h4>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                            {HEROES.filter(h => h.role === role)
+                              .sort((a,b) => a.name.localeCompare(b.name))
+                              .map(h => {
+                                const active = teamEnemyIds.includes(h.id);
+                                return (
+                                  <button
+                                    type="button"
+                                    key={h.id}
+                                    onClick={() => toggleTeamEnemy(h.id)}
+                                    className={`rounded-xl border px-2 py-2 text-xs transition text-left
+                                      ${active ? "border-white/20 bg-white text-zinc-950" : "border-white/10 bg-zinc-950/30 hover:bg-white/10"}`}
+                                  >
+                                    <div className="font-semibold">{h.name}</div>
+                                    <div className="mt-1 text-[10px] opacity-70">{h.difficulty}</div>
+                                  </button>
+                                );
+                              })}
+                          </div>
+                        </div>
                       ))}
                     </div>
 
@@ -936,6 +949,9 @@ export default function App() {
                       {teamEnemyHeroes.map((h) => (
                         <Badge key={h.id} className="border-white/10 bg-white/5">{h.name}</Badge>
                       ))}
+                      {teamEnemyHeroes.length >= 5 ? (
+                        <span className="text-xs text-zinc-400">Max 5 selected</span>
+                      ) : null}
                     </div>
                   </CardBody>
                 </Card>
