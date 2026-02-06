@@ -107,6 +107,54 @@ const HEROES: Hero[] = [
   { id: "zenyatta", name: "Zenyatta", role: "Support", difficulty: "Intermediate" },
 ];
 
+
+// --- Hero image helper (same naming idea as your Flask get_hero_image_url)
+function heroImageFilename(heroName: string) {
+  // Match your Flask logic: Icon-<Name>.webp with common special cases.
+  if (heroName === "Soldier: 76") return "Icon-Soldier_76.webp";
+  if (heroName === "D.Va") return "Icon-DVa.webp";
+
+  // Normalize: spaces -> underscores, remove periods, colons, apostrophes
+  const cleaned = heroName
+    .replace(/[’']/g, "")
+    .replace(/[:.]/g, "")
+    .replace(/\s+/g, "_")
+    .trim();
+
+  return `Icon-${cleaned}.webp`;
+}
+
+function heroImageSrc(hero: Hero) {
+  const role = hero.role.toLowerCase();
+  return `/images/heroes/${role}/${heroImageFilename(hero.name)}`;
+}
+
+function HeroAvatar({
+  hero,
+  size = 36,
+  className = "",
+}: {
+  hero: Hero;
+  size?: number;
+  className?: string;
+}) {
+  const [broken, setBroken] = React.useState(false);
+  const src = broken ? "/images/placeholder-hero.svg" : heroImageSrc(hero);
+
+  return (
+    <img
+      src={src}
+      alt={`${hero.name} portrait`}
+      width={size}
+      height={size}
+      loading="lazy"
+      onError={() => setBroken(true)}
+      className={`shrink-0 rounded-xl border border-white/10 bg-zinc-950/40 object-cover ${className}`}
+      style={{ width: size, height: size }}
+    />
+  );
+}
+
 // Tag pack for rule-based counters (expand per hero for better accuracy)
 const HERO_TAGS: Record<string, string[]> = {
   // Tanks
@@ -749,6 +797,7 @@ export default function App() {
                           <div key={m.counterId} className="rounded-2xl border border-white/10 p-3 bg-zinc-950/30">
                             <div className="flex items-center justify-between gap-3">
                               <div className="flex items-center gap-2">
+                                <HeroAvatar hero={h} size={34} />
                                 <span className="font-semibold">{h.name}</span>
                                 <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
                                 <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
@@ -814,6 +863,7 @@ export default function App() {
                         <div key={r.counterId} className="rounded-2xl border border-white/10 p-3 bg-zinc-950/30">
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-2">
+                              <HeroAvatar hero={h} size={34} />
                               <span className="font-semibold">{h.name}</span>
                               <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
                               <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
@@ -955,6 +1005,7 @@ export default function App() {
                             <div className="flex items-start justify-between gap-3">
                               <div className="space-y-1">
                                 <div className="flex flex-wrap items-center gap-2">
+                                  {hero ? <HeroAvatar hero={hero as any} size={28} /> : null}
                                   <Badge className="border-white/10 bg-white/5">{roleIcon(m.role)} {m.role}</Badge>
                                   <span className="font-semibold">{hero?.name ?? m.heroPlayedId}</span>
                                   <Badge className="border-white/10 bg-white/5">{m.outcome}</Badge>
@@ -1051,6 +1102,7 @@ export default function App() {
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
+                              <HeroAvatar hero={h} size={34} />
                               <span className="font-semibold">{h.name}</span>
                               <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
                               <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
