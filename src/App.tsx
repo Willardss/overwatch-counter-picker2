@@ -82,104 +82,100 @@ const MAPS = [
 ];
 
 const HEROES: Hero[] = [
-  // Tanks (sample; expand as needed)
-  { id: "dva", name: "D.Va", role: "Tank", difficulty: "Intermediate" },
-  { id: "reinhardt", name: "Reinhardt", role: "Tank", difficulty: "Beginner" },
-  { id: "winston", name: "Winston", role: "Tank", difficulty: "Intermediate" },
-  { id: "orisa", name: "Orisa", role: "Tank", difficulty: "Beginner" },
-  { id: "zarya", name: "Zarya", role: "Tank", difficulty: "Intermediate" },
-  { id: "roadhog", name: "Roadhog", role: "Tank", difficulty: "Beginner" },
-
-  // Damage (sample; expand as needed)
-  { id: "soldier76", name: "Soldier: 76", role: "Damage", difficulty: "Beginner" },
-  { id: "cassidy", name: "Cassidy", role: "Damage", difficulty: "Beginner" },
-  { id: "reaper", name: "Reaper", role: "Damage", difficulty: "Beginner" },
-  { id: "pharah", name: "Pharah", role: "Damage", difficulty: "Intermediate" },
-  { id: "tracer", name: "Tracer", role: "Damage", difficulty: "Advanced" },
-  { id: "widowmaker", name: "Widowmaker", role: "Damage", difficulty: "Advanced" },
-
-  // Support (sample; expand as needed)
-  { id: "ana", name: "Ana", role: "Support", difficulty: "Intermediate" },
-  { id: "mercy", name: "Mercy", role: "Support", difficulty: "Beginner" },
-  { id: "moira", name: "Moira", role: "Support", difficulty: "Beginner" },
-  { id: "brigitte", name: "Brigitte", role: "Support", difficulty: "Beginner" },
-  { id: "kiriko", name: "Kiriko", role: "Support", difficulty: "Advanced" },
-  { id: "zenyatta", name: "Zenyatta", role: "Support", difficulty: "Intermediate" },
+  { id: "dva", name: "D.Va", role: "Tank" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "doomfist", name: "Doomfist", role: "Tank" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "hazard", name: "Hazard", role: "Tank" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "junkerqueen", name: "Junker Queen", role: "Tank" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "mauga", name: "Mauga", role: "Tank" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "orisa", name: "Orisa", role: "Tank" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "ramattra", name: "Ramattra", role: "Tank" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "reinhardt", name: "Reinhardt", role: "Tank" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "roadhog", name: "Roadhog", role: "Tank" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "sigma", name: "Sigma", role: "Tank" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "winston", name: "Winston", role: "Tank" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "wreckingball", name: "Wrecking Ball", role: "Tank" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "zarya", name: "Zarya", role: "Tank" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "ashe", name: "Ashe", role: "Damage" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "bastion", name: "Bastion", role: "Damage" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "cassidy", name: "Cassidy", role: "Damage" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "echo", name: "Echo", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "freja", name: "Freja", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "genji", name: "Genji", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "hanzo", name: "Hanzo", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "junkrat", name: "Junkrat", role: "Damage" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "mei", name: "Mei", role: "Damage" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "pharah", name: "Pharah", role: "Damage" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "reaper", name: "Reaper", role: "Damage" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "sojourn", name: "Sojourn", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "soldier76", name: "Soldier: 76", role: "Damage" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "sombra", name: "Sombra", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "symmetra", name: "Symmetra", role: "Damage" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "torbjorn", name: "Torbjörn", role: "Damage" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "tracer", name: "Tracer", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "venture", name: "Venture", role: "Damage" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "widowmaker", name: "Widowmaker", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "vendetta", name: "Vendetta", role: "Damage" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "ana", name: "Ana", role: "Support" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "baptiste", name: "Baptiste", role: "Support" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "brigitte", name: "Brigitte", role: "Support" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "illari", name: "Illari", role: "Support" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "juno", name: "Juno", role: "Support" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "kiriko", name: "Kiriko", role: "Support" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "lifeweaver", name: "Lifeweaver", role: "Support" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "lucio", name: "Lúcio", role: "Support" as Role, difficulty: "Intermediate" as Difficulty },
+  { id: "mercy", name: "Mercy", role: "Support" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "moira", name: "Moira", role: "Support" as Role, difficulty: "Beginner" as Difficulty },
+  { id: "wuyang", name: "Wuyang", role: "Support" as Role, difficulty: "Advanced" as Difficulty },
+  { id: "zenyatta", name: "Zenyatta", role: "Support" as Role, difficulty: "Intermediate" as Difficulty },
 ];
-
-
-// --- Hero image helper (same naming idea as your Flask get_hero_image_url)
-function heroImageFilename(heroName: string) {
-  // Match your Flask logic: Icon-<Name>.webp with common special cases.
-  if (heroName === "Soldier: 76") return "Icon-Soldier_76.webp";
-  if (heroName === "D.Va") return "Icon-DVa.webp";
-
-  // Normalize: spaces -> underscores, remove periods, colons, apostrophes
-  const cleaned = heroName
-    .replace(/[’']/g, "")
-    .replace(/[:.]/g, "")
-    .replace(/\s+/g, "_")
-    .trim();
-
-  return `Icon-${cleaned}.webp`;
-}
-
-function heroImageSrc(hero: Hero) {
-  const role = hero.role.toLowerCase();
-  return `/images/heroes/${role}/${heroImageFilename(hero.name)}`;
-}
-
-function HeroAvatar({
-  hero,
-  size = 36,
-  className = "",
-}: {
-  hero: Hero;
-  size?: number;
-  className?: string;
-}) {
-  const [broken, setBroken] = React.useState(false);
-  const src = broken ? "/images/placeholder-hero.svg" : heroImageSrc(hero);
-
-  return (
-    <img
-      src={src}
-      alt={`${hero.name} portrait`}
-      width={size}
-      height={size}
-      loading="lazy"
-      onError={() => setBroken(true)}
-      className={`shrink-0 rounded-xl border border-white/10 bg-zinc-950/40 object-cover ${className}`}
-      style={{ width: size, height: size }}
-    />
-  );
-}
 
 // Tag pack for rule-based counters (expand per hero for better accuracy)
 const HERO_TAGS: Record<string, string[]> = {
-  // Tanks
-  dva: ["Dive", "Mobile", "Large"],
-  reinhardt: ["Brawl", "Anchor", "Large"],
-  winston: ["Dive", "Disrupt", "Large"],
-  orisa: ["Anchor", "Sustain", "Large"],
-  zarya: ["Beam", "Anchor", "Large"],
-  roadhog: ["Pick", "Sustain", "Large"],
-
-  // Damage
-  soldier76: ["Hitscan", "Poke"],
-  cassidy: ["Hitscan", "Peel", "CC"],
-  reaper: ["Brawl", "Tank-Buster", "Burst"],
+  dva: ["Dive", "Mobile", "Large", "Peel"],
+  doomfist: ["Dive", "Disrupt", "Mobile", "CC", "Large"],
+  hazard: ["Dive", "Disrupt", "Mobile", "Large"],
+  junkerqueen: ["Brawl", "Sustain", "Large", "CC"],
+  mauga: ["Brawl", "Sustain", "Large", "Tank-Buster"],
+  orisa: ["Anchor", "Sustain", "Large", "CC"],
+  ramattra: ["Brawl", "Poke", "Sustain", "Large", "CC"],
+  reinhardt: ["Brawl", "Anchor", "Large", "CC"],
+  roadhog: ["Pick", "Sustain", "Large", "CC"],
+  sigma: ["Poke", "Anchor", "Large", "CC"],
+  winston: ["Dive", "Disrupt", "Mobile", "Large"],
+  wreckingball: ["Dive", "Disrupt", "Mobile", "Large", "CC"],
+  zarya: ["Beam", "Anchor", "Large", "Sustain"],
+  ashe: ["Hitscan", "Poke", "Off-Angle", "Burst"],
+  bastion: ["Hitscan", "Tank-Buster", "Burst", "Large"],
+  cassidy: ["Hitscan", "Peel", "CC", "Burst"],
+  echo: ["Aerial", "Projectile", "Burst", "Dive"],
+  freja: ["Projectile", "Burst", "Mobile", "Off-Angle"],
+  genji: ["Flank", "Dive", "Projectile", "Mobile"],
+  hanzo: ["Projectile", "Sniper", "Pick"],
+  junkrat: ["Projectile", "Spam", "CC", "Burst"],
+  mei: ["Brawl", "CC", "Sustain"],
   pharah: ["Aerial", "Projectile", "Spam"],
-  tracer: ["Flank", "Dive"],
-  widowmaker: ["Sniper", "Hitscan", "Pick"],
-
-  // Support
-  ana: ["Anti-Heal", "Utility", "No Mobility"],
-  mercy: ["Pocket", "Mobile"],
-  moira: ["Sustain", "Mobile"],
-  brigitte: ["Peel", "CC", "Anti-Dive"],
-  kiriko: ["Cleanse", "Mobile", "Utility"],
-  zenyatta: ["Pick", "No Mobility", "Utility"],
+  reaper: ["Brawl", "Tank-Buster", "Burst"],
+  sojourn: ["Hitscan", "Burst", "Mobile", "Off-Angle"],
+  soldier76: ["Hitscan", "Poke", "Sustain"],
+  sombra: ["Flank", "Dive", "Hitscan", "Utility", "CC"],
+  symmetra: ["Beam", "Brawl", "Utility", "Spam"],
+  torbjorn: ["Projectile", "Brawl", "Sustain", "Spam"],
+  tracer: ["Flank", "Dive", "Mobile"],
+  venture: ["Brawl", "Dive", "Mobile", "CC"],
+  widowmaker: ["Sniper", "Hitscan", "Pick", "Off-Angle"],
+  vendetta: ["Projectile", "Burst", "Flank", "Mobile"],
+  ana: ["Anti-Heal", "Utility", "No Mobility", "CC"],
+  baptiste: ["Hitscan", "Utility", "Burst", "Sustain"],
+  brigitte: ["Peel", "CC", "Anti-Dive", "Brawl"],
+  illari: ["Hitscan", "Poke", "Burst"],
+  juno: ["Utility", "Mobile", "Sustain"],
+  kiriko: ["Cleanse", "Mobile", "Utility", "Burst"],
+  lifeweaver: ["Utility", "No Mobility", "Sustain"],
+  lucio: ["Mobile", "Utility", "Peel", "CC"],
+  mercy: ["Pocket", "Mobile", "Sustain"],
+  moira: ["Sustain", "Mobile", "Brawl"],
+  wuyang: ["Utility", "Mobile", "Burst", "Cleanse"],
+  zenyatta: ["Pick", "No Mobility", "Utility", "Burst"],
 };
 
 // --- Counter engine (patch-agnostic fundamentals)
@@ -797,7 +793,6 @@ export default function App() {
                           <div key={m.counterId} className="rounded-2xl border border-white/10 p-3 bg-zinc-950/30">
                             <div className="flex items-center justify-between gap-3">
                               <div className="flex items-center gap-2">
-                                <HeroAvatar hero={h} size={34} />
                                 <span className="font-semibold">{h.name}</span>
                                 <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
                                 <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
@@ -863,7 +858,6 @@ export default function App() {
                         <div key={r.counterId} className="rounded-2xl border border-white/10 p-3 bg-zinc-950/30">
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-2">
-                              <HeroAvatar hero={h} size={34} />
                               <span className="font-semibold">{h.name}</span>
                               <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
                               <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
@@ -1005,7 +999,6 @@ export default function App() {
                             <div className="flex items-start justify-between gap-3">
                               <div className="space-y-1">
                                 <div className="flex flex-wrap items-center gap-2">
-                                  {hero ? <HeroAvatar hero={hero as any} size={28} /> : null}
                                   <Badge className="border-white/10 bg-white/5">{roleIcon(m.role)} {m.role}</Badge>
                                   <span className="font-semibold">{hero?.name ?? m.heroPlayedId}</span>
                                   <Badge className="border-white/10 bg-white/5">{m.outcome}</Badge>
@@ -1102,7 +1095,6 @@ export default function App() {
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
-                              <HeroAvatar hero={h} size={34} />
                               <span className="font-semibold">{h.name}</span>
                               <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
                               <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
