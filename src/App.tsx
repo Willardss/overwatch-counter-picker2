@@ -322,6 +322,14 @@ function stars(r: number) {
   );
 }
 
+
+function worthText(r: number) {
+  if (r >= 4) return { label: \"Worth it\", sub: \"Favored matchup if you play it clean.\" };
+  if (r >= 3) return { label: \"Playable\", sub: \"Situational—depends on map/comp and your comfort.\" };
+  if (r >= 2) return { label: \"Risky\", sub: \"You’ll need outplays or team help.\" };
+  return { label: \"Not recommended\", sub: \"Hard matchup—swap if it’s not working.\" };
+}
+
 function formatDate(iso: string) {
   const d = new Date(iso);
   return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
@@ -501,6 +509,7 @@ export default function App() {
 
   // Global filters
   const [preferredRole, setPreferredRole] = useState<Role>("Damage");
+  const [favoriteHeroId, setFavoriteHeroId] = useState<string>("");
   const [beginnerOnly, setBeginnerOnly] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -584,11 +593,31 @@ export default function App() {
     return filtered;
   }, [singleEnemyId, preferredRole, beginnerOnly]);
 
+  const favoriteSingle = useMemo(() => {
+    if (!favoriteHeroId) return null;
+    return computeMatchup(singleEnemyId, favoriteHeroId);
+  }, [favoriteHeroId, singleEnemyId]);
+
+  const favoriteSingleHero = useMemo(() => {
+    if (!favoriteHeroId) return null;
+    return HEROES.find(h => h.id === favoriteHeroId) ?? null;
+  }, [favoriteHeroId]);
+
+
   const teamRecs = useMemo(() => {
     const recs = getCountersForTeam(teamEnemyIds, preferredRole, 8);
     const filtered = beginnerOnly ? recs.filter((r) => HEROES.find((h) => h.id === r.counterId)?.difficulty === "Beginner") : recs;
     return filtered;
   }, [teamEnemyIds, preferredRole, beginnerOnly]);
+
+  const favoriteTeam = useMemo(() => {
+    if (!favoriteHeroId) return null;
+    const dedup = Array.from(new Set(teamEnemyIds.filter(Boolean))).slice(0, 5);
+    const perEnemy = dedup.map(eid => ({ enemyId: eid, ...computeMatchup(eid, favoriteHeroId) }));
+    const avg = perEnemy.reduce((s, m) => s + m.rating, 0) / Math.max(1, perEnemy.length);
+    return { perEnemy, avgRating: Math.round(avg * 10) / 10 };
+  }, [favoriteHeroId, teamEnemyIds]);
+
 
   const filteredHeroLibrary = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -683,6 +712,20 @@ export default function App() {
                   { value: "Support", label: "Support" },
                 ]}
               />
+            </div>
+
+            <Btn
+            <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-zinc-950/40 px-3 py-2">
+              <span className="text-xs text-zinc-300">Fav</span>
+              <div className="min-w-[220px]">
+                <HeroSelect
+                  value={favoriteHeroId}
+                  onChange={setFavoriteHeroId}
+                  roleFilter={preferredRole}
+                  allowEmpty
+                  placeholder="Pick a favorite"
+                />
+              </div>
             </div>
 
             <Btn variant={beginnerOnly ? "primary" : "outline"} onClick={() => setBeginnerOnly((p) => !p)}>
@@ -780,7 +823,46 @@ export default function App() {
                     </CardBody>
                   </Card>
 
-                  <Card>
+                  
+                  {favoriteHeroId ? (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Favorite check</CardTitle>
+                        <CardDesc>See if your favorite is worth playing into this enemy.</CardDesc>
+                      </CardHeader>
+                      <CardBody className="space-y-3">
+                        {favoriteSingleHero ? (
+                          <div className="rounded-2xl border border-white/10 bg-zinc-950/30 p-3">
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold">{favoriteSingleHero.name}</span>
+                                <Badge className={`border ${pillClass(favoriteSingleHero.difficulty)}`}>{favoriteSingleHero.difficulty}</Badge>
+                                <Badge className="border-white/10 bg-white/5">{roleIcon(favoriteSingleHero.role)} {favoriteSingleHero.role}</Badge>
+                              </div>
+                              <div className="text-sm">{favoriteSingle ? stars(favoriteSingle.rating) : null}</div>
+                            </div>
+                            {favoriteSingle ? (
+                              <>
+                                <div className="mt-2 text-sm">
+                                  <span className="font-semibold">{worthText(favoriteSingle.rating).label}</span>
+                                  <span className="text-zinc-300"> — {worthText(favoriteSingle.rating).sub}</span>
+                                </div>
+                                <ul className="mt-2 list-disc pl-5 text-sm text-zinc-300 space-y-1">
+                                  {favoriteSingle.reasons.map((r, i) => <li key={i}>{r}</li>)}
+                                </ul>
+                              </>
+                            ) : (
+                              <div className="text-sm text-zinc-400">Pick a favorite above.</div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-sm text-zinc-400">Pick a favorite above.</div>
+                        )}
+                      </CardBody>
+                    </Card>
+                  ) : null}
+
+<Card>
                     <CardHeader>
                       <CardTitle>Recommended counters</CardTitle>
                       <CardDesc>Ratings are patch-agnostic fundamentals (1–5).</CardDesc>
@@ -794,6 +876,9 @@ export default function App() {
                             <div className="flex items-center justify-between gap-3">
                               <div className="flex items-center gap-2">
                                 <span className="font-semibold">{h.name}</span>
+                                {favoriteHeroId === h.id ? (
+                                  <Badge className="border-white/10 bg-white/5">★ Favorite</Badge>
+                                ) : null}
                                 <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
                                 <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
                               </div>
@@ -845,7 +930,51 @@ export default function App() {
                   </CardBody>
                 </Card>
 
-                <Card>
+                
+                {favoriteHeroId && favoriteTeam ? (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Favorite check</CardTitle>
+                      <CardDesc>How your favorite performs into the selected enemy team.</CardDesc>
+                    </CardHeader>
+                    <CardBody className="space-y-3">
+                      {favoriteSingleHero ? (
+                        <div className="rounded-2xl border border-white/10 bg-zinc-950/30 p-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold">{favoriteSingleHero.name}</span>
+                              <Badge className={`border ${pillClass(favoriteSingleHero.difficulty)}`}>{favoriteSingleHero.difficulty}</Badge>
+                              <Badge className="border-white/10 bg-white/5">{roleIcon(favoriteSingleHero.role)} {favoriteSingleHero.role}</Badge>
+                            </div>
+                            <div className="text-sm">Avg: {favoriteTeam.avgRating} {stars(favoriteTeam.avgRating)}</div>
+                          </div>
+                          <div className="mt-2 text-sm">
+                            <span className="font-semibold">{worthText(favoriteTeam.avgRating).label}</span>
+                            <span className="text-zinc-300"> — {worthText(favoriteTeam.avgRating).sub}</span>
+                          </div>
+                          <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {favoriteTeam.perEnemy.map((m: any) => {
+                              const e = HEROES.find((x) => x.id === m.enemyId);
+                              return (
+                                <div key={m.enemyId} className="rounded-xl border border-white/10 bg-white/5 p-2">
+                                  <div className="flex items-center justify-between">
+                                    <div className="text-sm font-medium">{e?.name ?? m.enemyId}</div>
+                                    <div className="text-xs">{stars(m.rating)}</div>
+                                  </div>
+                                  <div className="mt-1 text-xs text-zinc-300">{m.reasons[0]}</div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-sm text-zinc-400">Pick a favorite above.</div>
+                      )}
+                    </CardBody>
+                  </Card>
+                ) : null}
+
+<Card>
                   <CardHeader>
                     <CardTitle>Best counters</CardTitle>
                     <CardDesc>Average rating across selected enemies.</CardDesc>
@@ -859,6 +988,9 @@ export default function App() {
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold">{h.name}</span>
+                                {favoriteHeroId === h.id ? (
+                                  <Badge className="border-white/10 bg-white/5">★ Favorite</Badge>
+                                ) : null}
                               <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
                               <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
                             </div>
@@ -1096,6 +1228,9 @@ export default function App() {
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
                               <span className="font-semibold">{h.name}</span>
+                                {favoriteHeroId === h.id ? (
+                                  <Badge className="border-white/10 bg-white/5">★ Favorite</Badge>
+                                ) : null}
                               <Badge className="border-white/10 bg-white/5">{roleIcon(h.role)} {h.role}</Badge>
                               <Badge className={`border ${pillClass(h.difficulty)}`}>{h.difficulty}</Badge>
                             </div>
