@@ -324,10 +324,10 @@ function stars(r: number) {
 
 
 function worthText(r: number) {
-  if (r >= 4) return { label: \"Worth it\", sub: \"Favored matchup if you play it clean.\" };
-  if (r >= 3) return { label: \"Playable\", sub: \"Situational—depends on map/comp and your comfort.\" };
-  if (r >= 2) return { label: \"Risky\", sub: \"You’ll need outplays or team help.\" };
-  return { label: \"Not recommended\", sub: \"Hard matchup—swap if it’s not working.\" };
+  if (r >= 4) return { label: "Worth it", sub: "Favored matchup if you play it clean." };
+  if (r >= 3) return { label: "Playable", sub: "Situational—depends on map/comp and your comfort." };
+  if (r >= 2) return { label: "Risky", sub: "You’ll need outplays or team help." };
+  return { label: "Not recommended", sub: "Hard matchup—swap if it’s not working." };
 }
 
 function formatDate(iso: string) {
